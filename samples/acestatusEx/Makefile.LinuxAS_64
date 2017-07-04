@@ -1,0 +1,47 @@
+#=====================================================================
+# COPYRIGHT © 2002-2016 EMC CORPORATION
+#        ---ALL RIGHTS RESERVED---
+#=====================================================================
+
+# This example Makefile is setup to build for Linux using the GNU compiler.
+# Please make appropriate changes to the CC, INCDIR, LIBDIR and CCFLAGS
+# to reflect the system configuration that this will be compiled on.
+#
+# The definition of LIB_BASE is not the correct definition for shared
+# library builds. The correct definition would point to the absolute
+# path where the ACEAgentSDK has been installed. You must edit this
+# file and replace the LIB_BASE path with the complete path to the
+# ACEAgentSDK directory.
+# 
+# This file should have execute permissions.
+
+CC=gcc
+
+RM=/bin/rm
+MV=/bin/mv
+MKDIR=/bin/mkdir
+RMDIR=/bin/rmdir
+
+PROJECT=acestatusEx
+PLATFORM=lnx/release
+ARCH=64bit
+
+INC_BASE=../..
+LIB_BASE=../..
+
+INCDIR=$(INC_BASE)/ACECLNT/inc
+LIBDIR=$(LIB_BASE)/ct_ace_exp/lib/$(ARCH)/$(PLATFORM)
+
+ifdef BUILD_SAMPLES
+CCFLAGS = -DLINUX -DUNIX -DLINUX64 -D_BSD_SOURCE -D_XOPEN_SOURCE=500 -D_POSIX_C_SOURCE=199506 -m64 -D_REENTRANT -I$(INCDIR)
+A_LIBS = -m64 $(LIBDIR)/libaceclnt.a -L../../../../../../library/xerces-c/3.1.1/linux-86_64/lib/ -lstdc++ -lrt -lxerces-c-3.1 -ldl  -lpthread
+SO_LIBS = -m64 -L$(LIBDIR) -L../../../../../../library/xerces-c/3.1.1/linux-86_64/lib/ -laceclnt -dynamic -lxerces-c-3.1 -ldl  -lpthread
+else
+PLATFORM=lnx/Release
+INCDIR=$(INC_BASE)/inc
+LIBDIR=$(LIB_BASE)/lib/$(ARCH)/$(PLATFORM)
+CCFLAGS = -DLINUX -DUNIX -DLINUX64 -D_BSD_SOURCE -D_XOPEN_SOURCE=500 -D_POSIX_C_SOURCE=199506 -m64 -D_REENTRANT -I$(INCDIR)
+A_LIBS = -m64 $(LIBDIR)/libaceclnt.a -L$(LIBDIR) -lstdc++ -lrt -lxerces-c-3.1 -ldl -lpthread
+SO_LIBS = -m64 -L$(LIBDIR) -laceclnt -dynamic -lxerces-c-3.1 -ldl -lpthread
+endif
+include ../Makefile.common

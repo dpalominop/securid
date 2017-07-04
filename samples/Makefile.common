@@ -1,0 +1,29 @@
+#=====================================================================
+# COPYRIGHT © 2002-2016 EMC CORPORATION
+#           ALL RIGHTS RESERVED
+#=====================================================================
+
+##################################################
+# common makefile to be included by all samples
+# defines common targets for all Unix platforms
+
+all: bin/$(ARCH)/$(PLATFORM)/$(PROJECT)_a bin/$(ARCH)/$(PLATFORM)/$(PROJECT)_so
+
+clean:
+	-@$(RM) -Rf bin/$(ARCH)/$(PLATFORM)
+	-@$(RM) -Rf bin/$(ARCH)
+	-@$(RMDIR)  bin
+
+bin/$(ARCH)/$(PLATFORM):
+	-@$(MKDIR) -p $@
+
+bin/$(ARCH)/$(PLATFORM)/$(PROJECT)_a: bin/$(ARCH)/$(PLATFORM)/$(PROJECT).o
+	$(CC) -o $@ bin/$(ARCH)/$(PLATFORM)/$(PROJECT).o $(A_LIBS)
+	strip $@
+
+bin/$(ARCH)/$(PLATFORM)/$(PROJECT)_so: bin/$(ARCH)/$(PLATFORM)/$(PROJECT).o
+	$(CC) -o $@ bin/$(ARCH)/$(PLATFORM)/$(PROJECT).o $(SO_LIBS)
+
+bin/$(ARCH)/$(PLATFORM)/$(PROJECT).o: src/$(PROJECT).c bin/$(ARCH)/$(PLATFORM)
+	$(CC) -c $(CCFLAGS) src/$(PROJECT).c -o $@
+

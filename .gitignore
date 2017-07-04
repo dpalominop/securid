@@ -1,4 +1,4 @@
-Makefile
+.vscode
 mkmf.log
 *.gem
 *.o
