@@ -1,5 +1,24 @@
 #include "ruby.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#ifndef WIN32
+#include <termio.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#endif
+
+#define USE_ACE_AGENT_API_PROTOTYPES
 #include "acexport.h"
+
+#ifdef BLD_OFFLINEAUTH
+#include "da_svc_api.h"
+#endif
+
 #include "status_display.h"
 #include "securid.h"
 
